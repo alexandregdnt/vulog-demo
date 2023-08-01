@@ -1,7 +1,6 @@
 'use client';
 
 import { useState } from 'react';
-import {createToken} from "@/api/vulog";
 
 export default function SignIn() {
   const [email, setEmail] = useState('');
@@ -10,8 +9,7 @@ export default function SignIn() {
   const handleSignIn = async (e) => {
     e.preventDefault();
     try {
-        const userData = await createToken('dev@troopy.com', 'password');
-        console.log('User data:', userData);
+        // console.log('User data:', userData);
     } catch (error) {
       console.error('error.message');
     }
