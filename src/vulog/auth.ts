@@ -17,17 +17,12 @@ export async function createToken(username: string, password: string) {
         body: data,
     });
 
-    // store the token in the session
-    sessionStorage.setItem('token', JSON.stringify(await res.json()));
-
     // The return value is *not* serialized
     // You can return Date, Map, Set, etc.
     return await res.json();
 }
 
-export async function refreshToken() {
-    const refreshToken = JSON.parse(sessionStorage.getItem('token') as string).refresh_token;
-
+export async function refreshToken(refreshToken: string) {
     const data = new URLSearchParams({
         refresh_token: refreshToken,
         client_secret: process.env.VULOG_CLIENT_SECRET as string,
@@ -48,3 +43,5 @@ export async function refreshToken() {
     // You can return Date, Map, Set, etc.
     return await res.json();
 }
+
+

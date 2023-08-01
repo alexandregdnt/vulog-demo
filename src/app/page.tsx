@@ -1,13 +1,48 @@
+'use client'
+
 import Link from 'next/link'
 
 export default function Home() {
+
+  const handleGetCurentUser = () => {
+    const token = sessionStorage.getItem('token') as string;
+    const accessToken = JSON.parse(token)?.access_token;
+
+    if (!accessToken) {
+      console.error('Access token not found in sessionStorage');
+      return;
+    }
+
+    // Append the access token as a query parameter in the URL
+    const url = `/api/users?access_token=${encodeURIComponent(accessToken)}`;
+
+    // Call api next /api/user GET
+    fetch(url)
+        .then((response) => {
+          if (!response.ok) {
+            throw new Error('Network response was not ok');
+          }
+          return response.json();
+        })
+        .then((data) => {
+          // Handle the response data
+          console.log(data);
+        })
+        .catch((error) => {
+          // Handle any errors that occurred during the fetch
+          console.error('Error fetching data:', error);
+        });
+  };
+
+
+
   return (
       <div>
         <nav className='lg:hidden flex items-center justify-between p-8 bg-gray-700 mb-3'>
           <div className='w-full xl:w-auto px-2 xl:mr-12'>
             <div className='flex items-center justify-between'>
               <a className='inline-flex items-center h-8' href='#'>
-                <img src='@assets/trizzle-assets/logos/trizzle-logo.svg' alt='' />
+                <img src='/src/assets/trizzle-assets/logos/trizzle-logo.svg' alt='' />
               </a>
               <div className='xl:hidden'>
                 <button className='navbar-burger text-gray-400 hover:text-gray-300 focus:outline-none'>
@@ -35,7 +70,7 @@ export default function Home() {
             <a className='inline-block mb-12' href='#'>
               <img
                   className='h-7 mx-auto'
-                  src='@assets/trizzle-assets/logos/logo-only-trizzle.svg'
+                  src='/src/assets/trizzle-assets/logos/logo-only-trizzle.svg'
                   alt=''
               />
             </a>
@@ -177,9 +212,9 @@ export default function Home() {
               </ul>
             </div>
             <div className='mt-auto'>
-              <a
+              <button
                   className='flex items-center justify-center w-12 h-12 rounded-xl text-gray-400 hover:text-blue-500 hover:bg-gray-800'
-                  href='#'
+                  onClick={handleGetCurentUser}
               >
                 <svg
                     width={20}
@@ -193,7 +228,7 @@ export default function Home() {
                       fill='currentColor'
                   />
                 </svg>
-              </a>
+              </button>
               <Link
                   className='flex items-center justify-center w-12 h-12 rounded-xl text-gray-400 hover:text-blue-500 bg-gray-800'
                   href="/login"
@@ -272,7 +307,7 @@ export default function Home() {
                                 <div className='flex items-center'>
                                   <div className='flex items-center justify-center w-10 h-10 mr-3 bg-gray-400 bg-opacity-20 rounded-md'>
                                     <img
-                                        src='@assets/trizzle-assets/logos/artemis.svg'
+                                        src='/src/assets/trizzle-assets/logos/artemis.svg'
                                         alt=''
                                     />
                                   </div>
@@ -318,7 +353,7 @@ export default function Home() {
                                 <div className='flex items-center'>
                                   <div className='flex items-center justify-center w-10 h-10 mr-3 bg-gray-400 bg-opacity-20 rounded-md'>
                                     <img
-                                        src='@assets/trizzle-assets/logos/artemis.svg'
+                                        src='/src/assets/trizzle-assets/logos/artemis.svg'
                                         alt=''
                                     />
                                   </div>
@@ -364,7 +399,7 @@ export default function Home() {
                                 <div className='flex items-center'>
                                   <div className='flex items-center justify-center w-10 h-10 mr-3 bg-gray-400 bg-opacity-20 rounded-md'>
                                     <img
-                                        src='@assets/trizzle-assets/logos/artemis.svg'
+                                        src='/src/assets/trizzle-assets/logos/artemis.svg'
                                         alt=''
                                     />
                                   </div>
@@ -410,7 +445,7 @@ export default function Home() {
                                 <div className='flex items-center'>
                                   <div className='flex items-center justify-center w-10 h-10 mr-3 bg-gray-400 bg-opacity-20 rounded-md'>
                                     <img
-                                        src='@assets/trizzle-assets/logos/artemis.svg'
+                                        src='/src/assets/trizzle-assets/logos/artemis.svg'
                                         alt=''
                                     />
                                   </div>
@@ -456,7 +491,7 @@ export default function Home() {
                                 <div className='flex items-center'>
                                   <div className='flex items-center justify-center w-10 h-10 mr-3 bg-gray-400 bg-opacity-20 rounded-md'>
                                     <img
-                                        src='@assets/trizzle-assets/logos/artemis.svg'
+                                        src='/src/assets/trizzle-assets/logos/artemis.svg'
                                         alt=''
                                     />
                                   </div>
@@ -502,7 +537,7 @@ export default function Home() {
                                 <div className='flex items-center'>
                                   <div className='flex items-center justify-center w-10 h-10 mr-3 bg-gray-400 bg-opacity-20 rounded-md'>
                                     <img
-                                        src='@assets/trizzle-assets/logos/artemis.svg'
+                                        src='/src/assets/trizzle-assets/logos/artemis.svg'
                                         alt=''
                                     />
                                   </div>
@@ -548,7 +583,7 @@ export default function Home() {
                                 <div className='flex items-center'>
                                   <div className='flex items-center justify-center w-10 h-10 mr-3 bg-gray-400 bg-opacity-20 rounded-md'>
                                     <img
-                                        src='@assets/trizzle-assets/logos/artemis.svg'
+                                        src='/src/assets/trizzle-assets/logos/artemis.svg'
                                         alt=''
                                     />
                                   </div>
@@ -594,7 +629,7 @@ export default function Home() {
                                 <div className='flex items-center'>
                                   <div className='flex items-center justify-center w-10 h-10 mr-3 bg-gray-400 bg-opacity-20 rounded-md'>
                                     <img
-                                        src='@assets/trizzle-assets/logos/artemis.svg'
+                                        src='/src/assets/trizzle-assets/logos/artemis.svg'
                                         alt=''
                                     />
                                   </div>
@@ -640,7 +675,7 @@ export default function Home() {
                                 <div className='flex items-center'>
                                   <div className='flex items-center justify-center w-10 h-10 mr-3 bg-gray-400 bg-opacity-20 rounded-md'>
                                     <img
-                                        src='@assets/trizzle-assets/logos/artemis.svg'
+                                        src='/src/assets/trizzle-assets/logos/artemis.svg'
                                         alt=''
                                     />
                                   </div>
@@ -686,7 +721,7 @@ export default function Home() {
                                 <div className='flex items-center'>
                                   <div className='flex items-center justify-center w-10 h-10 mr-3 bg-gray-400 bg-opacity-20 rounded-md'>
                                     <img
-                                        src='@assets/trizzle-assets/logos/artemis.svg'
+                                        src='/src/assets/trizzle-assets/logos/artemis.svg'
                                         alt=''
                                     />
                                   </div>
@@ -732,7 +767,7 @@ export default function Home() {
                                 <div className='flex items-center'>
                                   <div className='flex items-center justify-center w-10 h-10 mr-3 bg-gray-400 bg-opacity-20 rounded-md'>
                                     <img
-                                        src='@assets/trizzle-assets/logos/artemis.svg'
+                                        src='/src/assets/trizzle-assets/logos/artemis.svg'
                                         alt=''
                                     />
                                   </div>
@@ -864,7 +899,7 @@ export default function Home() {
                       <div className='px-3 md:px-14 pb-6 mb-8 border-b border-gray-400'>
                         <img
                             className='block mx-auto mb-6'
-                            src='@assets/trizzle-assets/images/card.png'
+                            src='/src/assets/trizzle-assets/images/card.png'
                             alt=''
                         />
                         <div className='mb-6 text-center'>
@@ -907,7 +942,7 @@ export default function Home() {
                           <div className='flex items-center'>
                             <div className='flex w-12 h-12 mr-3 items-center justify-center bg-gray-600 rounded-full'>
                               <img
-                                  src='@assets/trizzle-assets/logos/s-stripe.svg'
+                                  src='/src/assets/trizzle-assets/logos/s-stripe.svg'
                                   alt=''
                               />
                             </div>
@@ -933,7 +968,7 @@ export default function Home() {
                           <div className='flex items-center'>
                             <div className='flex w-12 h-12 mr-3 items-center justify-center bg-gray-600 rounded-full'>
                               <img
-                                  src='@assets/trizzle-assets/logos/f-facebook.svg'
+                                  src='/src/assets/trizzle-assets/logos/f-facebook.svg'
                                   alt=''
                               />
                             </div>
@@ -959,7 +994,7 @@ export default function Home() {
                           <div className='flex items-center'>
                             <div className='flex w-12 h-12 mr-3 items-center justify-center bg-gray-600 rounded-full'>
                               <img
-                                  src='@assets/trizzle-assets/logos/twitter-icon.svg'
+                                  src='/src/assets/trizzle-assets/logos/twitter-icon.svg'
                                   alt=''
                               />
                             </div>
@@ -985,7 +1020,7 @@ export default function Home() {
                           <div className='flex items-center'>
                             <div className='flex w-12 h-12 mr-3 items-center justify-center bg-gray-600 rounded-full'>
                               <img
-                                  src='@assets/trizzle-assets/logos/slack-icon.svg'
+                                  src='/src/assets/trizzle-assets/logos/slack-icon.svg'
                                   alt=''
                               />
                             </div>
@@ -1011,7 +1046,7 @@ export default function Home() {
                           <div className='flex items-center'>
                             <div className='flex w-12 h-12 mr-3 items-center justify-center bg-gray-600 rounded-full'>
                               <img
-                                  src='@assets/trizzle-assets/logos/steam-icon.svg'
+                                  src='/src/assets/trizzle-assets/logos/steam-icon.svg'
                                   alt=''
                               />
                             </div>

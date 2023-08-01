@@ -1,5 +1,5 @@
 import {NextApiRequest, NextApiResponse} from "next";
-import {createToken} from "@/utils/vulog";
+import {createToken} from "@/vulog/auth";
 import {jsonConcat} from "@/utils/helpers";
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {

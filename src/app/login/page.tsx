@@ -38,7 +38,7 @@ export default function SignIn() {
         });
 
         if (res.status === 200) {
-            sessionStorage.setItem('userInfo', JSON.stringify(await res.json()));
+            sessionStorage.setItem('token', JSON.stringify(await res.json()));
             await router.push('/');
         }
     } catch (error: any) {
