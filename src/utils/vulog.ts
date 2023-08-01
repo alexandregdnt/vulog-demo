@@ -8,8 +8,6 @@ export async function createToken(username: string, password: string) {
         grant_type: 'password'
     });
 
-    console.log(process.env.VULOG_HOST, process.env.VULOG_FLEET_ID, process.env.VULOG_CLIENT_SECRET, process.env.VULOG_CLIENT_ID)
-
     const res = await fetch(`${process.env.VULOG_HOST}/auth/realms/${process.env.VULOG_FLEET_ID}/protocol/openid-connect/token`, {
         method: "POST",
         headers: {

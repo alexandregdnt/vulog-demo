@@ -1,17 +1,48 @@
 'use client';
 
-import { useState } from 'react';
+import {useEffect, useState} from 'react';
+import {redirect, useRouter} from "next/navigation";
 
 export default function SignIn() {
+    const router = useRouter();
+
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
-  const handleSignIn = async (e) => {
+  useEffect(() => {
+      const userInfo = sessionStorage.getItem('userInfo');
+
+      if (userInfo) {
+          const jsonUserInfo = JSON.parse(userInfo);
+          if (jsonUserInfo.fetch_timestamp + jsonUserInfo.expires_in <= new Date().getTime()) {
+              redirect('/');
+          }
+      }
+  }, []);
+
+  const handleSignIn = async (e: any) => {
     e.preventDefault();
+
     try {
-        // console.log('User data:', userData);
-    } catch (error) {
-      console.error('error.message');
+        const data = new URLSearchParams({
+            username: email,
+            password
+        });
+        const res = await fetch(`/api/login`, {
+            method: "POST",
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+                Accept: 'application/json, text/plain, */*',
+            },
+            body: data
+        });
+
+        if (res.status === 200) {
+            sessionStorage.setItem('userInfo', JSON.stringify(await res.json()));
+            await router.push('/');
+        }
+    } catch (error: any) {
+      console.error(error.message);
     }
   };
 
