@@ -60,23 +60,21 @@ type UserData = {
 
 export async function getUser(token: string) {
     try {
+        const headers = new Headers();
+        headers.append("x-api-key", process.env.VULOG_API_KEY as string);
+        headers.append("Authorization", "Bearer " + token);
+        headers.append("Content-Type", "application/json");
         const res = await fetch(`${process.env.VULOG_HOST}/apiv5/user`, {
             method: 'GET',
-            headers: {
-                Authorization: `Bearer ${token}`,
-                Accept: 'application/json, text/plain, */*',
-                x_api_key: process.env.VULOG_API_KEY as string,
-            },
+            headers: headers,
         });
 
-        if (!res.ok) {
-            // If the response status is not OK (i.e., not 2xx), throw an error with the status text
-            throw new Error(`Request failed with status: ${res.status} - ${res.statusText}`);
-        }
+        const data = await res.json();
+        console.log('data :>> ', data);
 
         // The return value is *not* serialized
         // You can return Date, Map, Set, etc.
-        return await res.json();
+        return data as UserData;
     } catch (error) {
         // Catch any errors that occurred during the API request and handle them appropriately
         console.error('Error fetching user data:', error);
