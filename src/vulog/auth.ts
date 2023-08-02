@@ -1,3 +1,12 @@
+export type TokenObj = {
+    access_token: string;
+    expires_in: number;
+    fetch_timestamp: number;
+    refresh_expires_in: number;
+    refresh_token: string;
+    token_type: "bearer";
+}
+
 export async function createToken(username: string, password: string) {
     const data = new URLSearchParams({
         username: username,

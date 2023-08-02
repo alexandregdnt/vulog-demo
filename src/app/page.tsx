@@ -2,10 +2,23 @@
 
 import Link from 'next/link'
 import Table from '@components/Table/Table'
-import {useState} from "react";
+import {useEffect, useState} from "react";
+import {redirect} from "next/navigation";
+import {verifyToken} from "@/utils/helpers";
 
 export default function Home() {
   const [dataPack, setDataPack] = useState([]);
+
+  useEffect(() => {
+    switch (verifyToken(sessionStorage.getItem('token'))) {
+      case -1:
+        redirect('/auth/logout');
+        break;
+      case 0:
+        redirect('/auth/refresh');
+        break;
+    }
+  }, []);
 
   const handleGetCurentUser = () => {
     const token = sessionStorage.getItem('token') as string;
@@ -70,7 +83,7 @@ export default function Home() {
     };
 
 
-  const headers = ['NAME', 'PRICE ($)', 'CREDITS', 'VALIDE (jours)'];
+  const headers = ['NAME', 'PRICE (€)', 'CREDITS', 'VALIDE (days)'];
   const data = [
     ['Package 2', '100', '300', '30'],
   ];
@@ -270,7 +283,7 @@ export default function Home() {
               </button>
               <Link
                   className='flex items-center justify-center w-12 h-12 rounded-xl text-gray-400 hover:text-blue-500 bg-gray-800'
-                  href="/login"
+                  href="/auth/logout"
               >
                 <svg
                     width={20}

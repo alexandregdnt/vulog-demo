@@ -12,6 +12,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
         res.status(200).json(result);
     } else {
-        res.status(400).json({message: 'Username or password invalid'})
+        res.status(400).json({message: 'Username or password invalid'});
     }
 }

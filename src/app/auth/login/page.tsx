@@ -2,23 +2,24 @@
 
 import {useEffect, useState} from 'react';
 import {redirect, useRouter} from "next/navigation";
+import {verifyToken} from "@/utils/helpers";
 
-export default function SignIn() {
+export default function Login() {
     const router = useRouter();
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
-  useEffect(() => {
-      const token = sessionStorage.getItem('token');
-
-      if (token) {
-          const jsonToken = JSON.parse(token);
-          if (jsonToken.fetch_timestamp + jsonToken.expires_in <= new Date().getTime()) {
-              redirect('/');
-          }
-      }
-  }, []);
+    useEffect(() => {
+        switch (verifyToken(sessionStorage.getItem('token'))) {
+            case 0:
+                redirect('/auth/refresh');
+                break;
+            case 1:
+                redirect('/');
+                break;
+        }
+    }, []);
 
   const handleSignIn = async (e: any) => {
     e.preventDefault();
