@@ -519,7 +519,7 @@ export default function Home() {
                   </div>
                 </div>
               </section>*/}
-              <Table headers={headers} data={dataPack} />
+              <Table headers={headers} data={dataPack} itemsPerPage={2}/>
               {/*END TABLE*/}
             </div>
             <div className='w-full md:w-1/3 px-3 mb-3 md:mb-0'>
