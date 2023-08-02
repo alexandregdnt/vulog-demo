@@ -69,7 +69,7 @@ export async function getUser(token: string) {
             headers: headers,
         });
 
-        const data = await res.json();
+        const data: UserData = await res.json();
         console.log('data :>> ', data);
 
         // The return value is *not* serialized
