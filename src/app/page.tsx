@@ -18,6 +18,9 @@ export default function Home() {
         redirect('/auth/refresh');
         break;
     }
+
+    handleSystemCreditsPackage()
+        .then((res) => console.log(res));
   }, []);
 
   const handleGetCurentUser = () => {
