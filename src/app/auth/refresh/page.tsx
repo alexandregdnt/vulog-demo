@@ -29,14 +29,14 @@ export default function Refresh() {
                         })
                             .then(async (res) => {
                                 sessionStorage.setItem('token', JSON.stringify(await res.json()));
-                                router.push('/');
+                                router.push('/dashboard');
                             });
                     } catch (error: any) {
                         console.error(error.message);
                     }
                     break;
                 case 1:
-                    redirect('/');
+                    redirect('/dashboard');
                     break;
                 default:
                     redirect('/auth/logout');

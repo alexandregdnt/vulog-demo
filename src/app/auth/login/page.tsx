@@ -16,7 +16,7 @@ export default function Login() {
                 redirect('/auth/refresh');
                 break;
             case 1:
-                redirect('/');
+                redirect('/dashboard');
                 break;
         }
     }, []);
