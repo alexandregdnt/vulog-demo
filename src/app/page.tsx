@@ -1,8 +1,11 @@
 'use client'
 
 import Link from 'next/link'
+import Table from '@components/Table/Table'
+import {useState} from "react";
 
 export default function Home() {
+  const [dataPack, setDataPack] = useState([]);
 
   const handleGetCurentUser = () => {
     const token = sessionStorage.getItem('token') as string;
@@ -34,7 +37,43 @@ export default function Home() {
         });
   };
 
+  const handleSystemCreditsPackage = async () => {
+    const token = sessionStorage.getItem('token') as string;
+    const accessToken = JSON.parse(token)?.access_token;
 
+    if (!accessToken) {
+      console.error('Access token not found in sessionStorage');
+      return;
+    }
+
+    // Append the access token as a query parameter in the URL
+    const url = `/api/systemCredits?access_token=${encodeURIComponent(accessToken)}`;
+
+    // Call api next /api/systemCredits GET
+    fetch(url)
+        .then((response) => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.json();
+        })
+        .then((data) => {
+          // Map the response data to a new structure
+          const transformedData = data.map((item: any) => [item.name, item.price.toString(), item.systemCreditsAvailable.toString(), item.validityDays.toString()]);
+          setDataPack(transformedData);
+          console.log(transformedData);
+        })
+        .catch((error) => {
+            // Handle any errors that occurred during the fetch
+            console.error('Error fetching data:', error);
+        });
+    };
+
+
+  const headers = ['NAME', 'PRICE ($)', 'CREDITS', 'VALIDE (jours)'];
+  const data = [
+    ['Package 2', '100', '300', '30'],
+  ];
 
   return (
       <div>
@@ -77,9 +116,9 @@ export default function Home() {
             <div className='mb-6'>
               <ul>
                 <li>
-                  <a
+                  <button
                       className='flex items-center justify-center w-12 h-12 rounded-xl text-gray-400 hover:text-blue-500 hover:bg-gray-800'
-                      href='#'
+                      onClick={handleSystemCreditsPackage}
                   >
                     <svg
                         width={24}
@@ -93,7 +132,7 @@ export default function Home() {
                           fill='currentColor'
                       />
                     </svg>
-                  </a>
+                  </button>
                 </li>
                 <li>
                   <a
@@ -252,7 +291,8 @@ export default function Home() {
         <div className='mx-auto lg:ml-24'>
           <div className='flex flex-wrap -mx-3 -mb-3 md:mb-0'>
             <div className='w-full md:w-2/3 px-3 mb-3 md:mb-0'>
-              <section className='py-3'>
+              {/*START TABLE*/}
+              {/*<section className='py-3'>
                 <div className='container px-4 mx-auto'>
                   <div className='pt-6 pb-8 bg-gray-500 rounded-xl'>
                     <div className='px-6'>
@@ -439,374 +479,6 @@ export default function Home() {
                               </div>
                             </td>
                           </tr>
-                          <tr>
-                            <td className='p-0'>
-                              <div className='flex items-center h-16 px-6 rounded-l-xl bg-gray-600'>
-                                <div className='flex items-center'>
-                                  <div className='flex items-center justify-center w-10 h-10 mr-3 bg-gray-400 bg-opacity-20 rounded-md'>
-                                    <img
-                                        src='/src/assets/trizzle-assets/logos/artemis.svg'
-                                        alt=''
-                                    />
-                                  </div>
-                                  <span className='text-sm text-gray-100 font-medium'>
-                                      Artemis
-                                    </span>
-                                </div>
-                              </div>
-                            </td>
-                            <td className='p-0'>
-                              <div className='flex items-center h-16 px-6 bg-gray-600'>
-                                  <span className='inline-block px-2 py-1 text-xs text-gray-300 font-medium bg-gray-700 rounded-full'>
-                                    NO-CODE
-                                  </span>
-                              </div>
-                            </td>
-                            <td className='p-0'>
-                              <div className='flex items-center h-16 px-6 bg-gray-600'>
-                                  <span className='text-sm text-gray-100 font-medium'>
-                                    Warsaw, Poland
-                                  </span>
-                              </div>
-                            </td>
-                            <td className='p-0'>
-                              <div className='flex items-center h-16 px-6 bg-gray-600'>
-                                <span className='inline-block w-2 h-2 mr-1 bg-green-500 rounded-full' />
-                                <span className='text-sm font-medium text-gray-100'>
-                                    Enrolled
-                                  </span>
-                              </div>
-                            </td>
-                            <td className='p-0'>
-                              <div className='flex items-center h-16 px-6 rounded-r-xl bg-gray-600'>
-                                  <span className='text-sm text-gray-100 font-medium'>
-                                    June 06, 2022
-                                  </span>
-                              </div>
-                            </td>
-                          </tr>
-                          <tr>
-                            <td className='p-0'>
-                              <div className='flex items-center h-16 px-6'>
-                                <div className='flex items-center'>
-                                  <div className='flex items-center justify-center w-10 h-10 mr-3 bg-gray-400 bg-opacity-20 rounded-md'>
-                                    <img
-                                        src='/src/assets/trizzle-assets/logos/artemis.svg'
-                                        alt=''
-                                    />
-                                  </div>
-                                  <span className='text-sm text-gray-100 font-medium'>
-                                      Artemis
-                                    </span>
-                                </div>
-                              </div>
-                            </td>
-                            <td className='p-0'>
-                              <div className='flex items-center h-16 px-6'>
-                                  <span className='inline-block px-2 py-1 text-xs text-gray-300 font-medium bg-gray-700 rounded-full'>
-                                    NO-CODE
-                                  </span>
-                              </div>
-                            </td>
-                            <td className='p-0'>
-                              <div className='flex items-center h-16 px-6'>
-                                  <span className='text-sm text-gray-100 font-medium'>
-                                    Warsaw, Poland
-                                  </span>
-                              </div>
-                            </td>
-                            <td className='p-0'>
-                              <div className='flex items-center h-16 px-6'>
-                                <span className='inline-block w-2 h-2 mr-1 bg-green-500 rounded-full' />
-                                <span className='text-sm font-medium text-gray-100'>
-                                    Enrolled
-                                  </span>
-                              </div>
-                            </td>
-                            <td className='p-0'>
-                              <div className='flex items-center h-16 px-6'>
-                                  <span className='text-sm text-gray-100 font-medium'>
-                                    June 06, 2022
-                                  </span>
-                              </div>
-                            </td>
-                          </tr>
-                          <tr>
-                            <td className='p-0'>
-                              <div className='flex items-center h-16 px-6 rounded-l-xl bg-gray-600'>
-                                <div className='flex items-center'>
-                                  <div className='flex items-center justify-center w-10 h-10 mr-3 bg-gray-400 bg-opacity-20 rounded-md'>
-                                    <img
-                                        src='/src/assets/trizzle-assets/logos/artemis.svg'
-                                        alt=''
-                                    />
-                                  </div>
-                                  <span className='text-sm text-gray-100 font-medium'>
-                                      Artemis
-                                    </span>
-                                </div>
-                              </div>
-                            </td>
-                            <td className='p-0'>
-                              <div className='flex items-center h-16 px-6 bg-gray-600'>
-                                  <span className='inline-block px-2 py-1 text-xs text-gray-300 font-medium bg-gray-700 rounded-full'>
-                                    NO-CODE
-                                  </span>
-                              </div>
-                            </td>
-                            <td className='p-0'>
-                              <div className='flex items-center h-16 px-6 bg-gray-600'>
-                                  <span className='text-sm text-gray-100 font-medium'>
-                                    Warsaw, Poland
-                                  </span>
-                              </div>
-                            </td>
-                            <td className='p-0'>
-                              <div className='flex items-center h-16 px-6 bg-gray-600'>
-                                <span className='inline-block w-2 h-2 mr-1 bg-green-500 rounded-full' />
-                                <span className='text-sm font-medium text-gray-100'>
-                                    Enrolled
-                                  </span>
-                              </div>
-                            </td>
-                            <td className='p-0'>
-                              <div className='flex items-center h-16 px-6 rounded-r-xl bg-gray-600'>
-                                  <span className='text-sm text-gray-100 font-medium'>
-                                    June 06, 2022
-                                  </span>
-                              </div>
-                            </td>
-                          </tr>
-                          <tr>
-                            <td className='p-0'>
-                              <div className='flex items-center h-16 px-6'>
-                                <div className='flex items-center'>
-                                  <div className='flex items-center justify-center w-10 h-10 mr-3 bg-gray-400 bg-opacity-20 rounded-md'>
-                                    <img
-                                        src='/src/assets/trizzle-assets/logos/artemis.svg'
-                                        alt=''
-                                    />
-                                  </div>
-                                  <span className='text-sm text-gray-100 font-medium'>
-                                      Artemis
-                                    </span>
-                                </div>
-                              </div>
-                            </td>
-                            <td className='p-0'>
-                              <div className='flex items-center h-16 px-6'>
-                                  <span className='inline-block px-2 py-1 text-xs text-gray-300 font-medium bg-gray-700 rounded-full'>
-                                    NO-CODE
-                                  </span>
-                              </div>
-                            </td>
-                            <td className='p-0'>
-                              <div className='flex items-center h-16 px-6'>
-                                  <span className='text-sm text-gray-100 font-medium'>
-                                    Warsaw, Poland
-                                  </span>
-                              </div>
-                            </td>
-                            <td className='p-0'>
-                              <div className='flex items-center h-16 px-6'>
-                                <span className='inline-block w-2 h-2 mr-1 bg-green-500 rounded-full' />
-                                <span className='text-sm font-medium text-gray-100'>
-                                    Enrolled
-                                  </span>
-                              </div>
-                            </td>
-                            <td className='p-0'>
-                              <div className='flex items-center h-16 px-6'>
-                                  <span className='text-sm text-gray-100 font-medium'>
-                                    June 06, 2022
-                                  </span>
-                              </div>
-                            </td>
-                          </tr>
-                          <tr>
-                            <td className='p-0'>
-                              <div className='flex items-center h-16 px-6 rounded-l-xl bg-gray-600'>
-                                <div className='flex items-center'>
-                                  <div className='flex items-center justify-center w-10 h-10 mr-3 bg-gray-400 bg-opacity-20 rounded-md'>
-                                    <img
-                                        src='/src/assets/trizzle-assets/logos/artemis.svg'
-                                        alt=''
-                                    />
-                                  </div>
-                                  <span className='text-sm text-gray-100 font-medium'>
-                                      Artemis
-                                    </span>
-                                </div>
-                              </div>
-                            </td>
-                            <td className='p-0'>
-                              <div className='flex items-center h-16 px-6 bg-gray-600'>
-                                  <span className='inline-block px-2 py-1 text-xs text-gray-300 font-medium bg-gray-700 rounded-full'>
-                                    NO-CODE
-                                  </span>
-                              </div>
-                            </td>
-                            <td className='p-0'>
-                              <div className='flex items-center h-16 px-6 bg-gray-600'>
-                                  <span className='text-sm text-gray-100 font-medium'>
-                                    Warsaw, Poland
-                                  </span>
-                              </div>
-                            </td>
-                            <td className='p-0'>
-                              <div className='flex items-center h-16 px-6 bg-gray-600'>
-                                <span className='inline-block w-2 h-2 mr-1 bg-green-500 rounded-full' />
-                                <span className='text-sm font-medium text-gray-100'>
-                                    Enrolled
-                                  </span>
-                              </div>
-                            </td>
-                            <td className='p-0'>
-                              <div className='flex items-center h-16 px-6 rounded-r-xl bg-gray-600'>
-                                  <span className='text-sm text-gray-100 font-medium'>
-                                    June 06, 2022
-                                  </span>
-                              </div>
-                            </td>
-                          </tr>
-                          <tr>
-                            <td className='p-0'>
-                              <div className='flex items-center h-16 px-6'>
-                                <div className='flex items-center'>
-                                  <div className='flex items-center justify-center w-10 h-10 mr-3 bg-gray-400 bg-opacity-20 rounded-md'>
-                                    <img
-                                        src='/src/assets/trizzle-assets/logos/artemis.svg'
-                                        alt=''
-                                    />
-                                  </div>
-                                  <span className='text-sm text-gray-100 font-medium'>
-                                      Artemis
-                                    </span>
-                                </div>
-                              </div>
-                            </td>
-                            <td className='p-0'>
-                              <div className='flex items-center h-16 px-6'>
-                                  <span className='inline-block px-2 py-1 text-xs text-gray-300 font-medium bg-gray-700 rounded-full'>
-                                    NO-CODE
-                                  </span>
-                              </div>
-                            </td>
-                            <td className='p-0'>
-                              <div className='flex items-center h-16 px-6'>
-                                  <span className='text-sm text-gray-100 font-medium'>
-                                    Warsaw, Poland
-                                  </span>
-                              </div>
-                            </td>
-                            <td className='p-0'>
-                              <div className='flex items-center h-16 px-6'>
-                                <span className='inline-block w-2 h-2 mr-1 bg-green-500 rounded-full' />
-                                <span className='text-sm font-medium text-gray-100'>
-                                    Enrolled
-                                  </span>
-                              </div>
-                            </td>
-                            <td className='p-0'>
-                              <div className='flex items-center h-16 px-6'>
-                                  <span className='text-sm text-gray-100 font-medium'>
-                                    June 06, 2022
-                                  </span>
-                              </div>
-                            </td>
-                          </tr>
-                          <tr>
-                            <td className='p-0'>
-                              <div className='flex items-center h-16 px-6 rounded-l-xl bg-gray-600'>
-                                <div className='flex items-center'>
-                                  <div className='flex items-center justify-center w-10 h-10 mr-3 bg-gray-400 bg-opacity-20 rounded-md'>
-                                    <img
-                                        src='/src/assets/trizzle-assets/logos/artemis.svg'
-                                        alt=''
-                                    />
-                                  </div>
-                                  <span className='text-sm text-gray-100 font-medium'>
-                                      Artemis
-                                    </span>
-                                </div>
-                              </div>
-                            </td>
-                            <td className='p-0'>
-                              <div className='flex items-center h-16 px-6 bg-gray-600'>
-                                  <span className='inline-block px-2 py-1 text-xs text-gray-300 font-medium bg-gray-700 rounded-full'>
-                                    NO-CODE
-                                  </span>
-                              </div>
-                            </td>
-                            <td className='p-0'>
-                              <div className='flex items-center h-16 px-6 bg-gray-600'>
-                                  <span className='text-sm text-gray-100 font-medium'>
-                                    Warsaw, Poland
-                                  </span>
-                              </div>
-                            </td>
-                            <td className='p-0'>
-                              <div className='flex items-center h-16 px-6 bg-gray-600'>
-                                <span className='inline-block w-2 h-2 mr-1 bg-green-500 rounded-full' />
-                                <span className='text-sm font-medium text-gray-100'>
-                                    Enrolled
-                                  </span>
-                              </div>
-                            </td>
-                            <td className='p-0'>
-                              <div className='flex items-center h-16 px-6 rounded-r-xl bg-gray-600'>
-                                  <span className='text-sm text-gray-100 font-medium'>
-                                    June 06, 2022
-                                  </span>
-                              </div>
-                            </td>
-                          </tr>
-                          <tr>
-                            <td className='p-0'>
-                              <div className='flex items-center h-16 px-6'>
-                                <div className='flex items-center'>
-                                  <div className='flex items-center justify-center w-10 h-10 mr-3 bg-gray-400 bg-opacity-20 rounded-md'>
-                                    <img
-                                        src='/src/assets/trizzle-assets/logos/artemis.svg'
-                                        alt=''
-                                    />
-                                  </div>
-                                  <span className='text-sm text-gray-100 font-medium'>
-                                      Artemis
-                                    </span>
-                                </div>
-                              </div>
-                            </td>
-                            <td className='p-0'>
-                              <div className='flex items-center h-16 px-6'>
-                                  <span className='inline-block px-2 py-1 text-xs text-gray-300 font-medium bg-gray-700 rounded-full'>
-                                    NO-CODE
-                                  </span>
-                              </div>
-                            </td>
-                            <td className='p-0'>
-                              <div className='flex items-center h-16 px-6'>
-                                  <span className='text-sm text-gray-100 font-medium'>
-                                    Warsaw, Poland
-                                  </span>
-                              </div>
-                            </td>
-                            <td className='p-0'>
-                              <div className='flex items-center h-16 px-6'>
-                                <span className='inline-block w-2 h-2 mr-1 bg-green-500 rounded-full' />
-                                <span className='text-sm font-medium text-gray-100'>
-                                    Enrolled
-                                  </span>
-                              </div>
-                            </td>
-                            <td className='p-0'>
-                              <div className='flex items-center h-16 px-6'>
-                                  <span className='text-sm text-gray-100 font-medium'>
-                                    June 06, 2022
-                                  </span>
-                              </div>
-                            </td>
-                          </tr>
                           </tbody>
                         </table>
                       </div>
@@ -846,7 +518,9 @@ export default function Home() {
                     </div>
                   </div>
                 </div>
-              </section>
+              </section>*/}
+              <Table headers={headers} data={dataPack} />
+              {/*END TABLE*/}
             </div>
             <div className='w-full md:w-1/3 px-3 mb-3 md:mb-0'>
               <section className='py-3'>
