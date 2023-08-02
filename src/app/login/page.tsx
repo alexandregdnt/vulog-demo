@@ -10,11 +10,11 @@ export default function SignIn() {
   const [password, setPassword] = useState('');
 
   useEffect(() => {
-      const userInfo = sessionStorage.getItem('userInfo');
+      const token = sessionStorage.getItem('token');
 
-      if (userInfo) {
-          const jsonUserInfo = JSON.parse(userInfo);
-          if (jsonUserInfo.fetch_timestamp + jsonUserInfo.expires_in <= new Date().getTime()) {
+      if (token) {
+          const jsonToken = JSON.parse(token);
+          if (jsonToken.fetch_timestamp + jsonToken.expires_in <= new Date().getTime()) {
               redirect('/');
           }
       }
