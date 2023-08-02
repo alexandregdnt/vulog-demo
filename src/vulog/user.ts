@@ -14,7 +14,7 @@ type Agreement = {
     hasAcceptedLatest: boolean;
 };
 
-type Service = {
+export type Service = {
     id: string;
     name: string;
     status: string;
@@ -41,7 +41,7 @@ type Profile = {
     billingInProgress: string | null;
 };
 
-type UserData = {
+export type UserData = {
     id: string;
     lastName: string;
     firstName: string;
