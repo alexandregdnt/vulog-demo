@@ -1,4 +1,7 @@
+import extraConfig, {AgeLimitation} from "../../data/extra.config";
 import {TokenObj} from "@/vulog/auth";
+import {User} from "@/vulog/users";
+import {SystemCreditsPackage} from "@/vulog/systemCredits";
 
 export function jsonConcat(o1: any, o2: any) {
     for (let key in o2) {
@@ -20,4 +23,38 @@ export function verifyToken(strObj: string | null): -1 | 0 | 1 {
     }
 
     return -1;
+}
+
+export function filterAvailablePackages(packages: SystemCreditsPackage[], user: User): SystemCreditsPackage[] {
+    return packages.filter(packageItem => {
+        const ageLimitations = extraConfig.ageLimitations;
+
+        for (const ageLimit of ageLimitations) {
+            if (checkAgeLimitation(ageLimit, user)) {
+                return ageLimit.packagesIds.includes(packageItem.id);
+            }
+        }
+
+        return false;
+    });
+}
+
+function checkAgeLimitation(ageLimit: AgeLimitation, user: User): boolean {
+    const ageDifference = new Date().getTime() - user.birthDate.getTime();
+    const ageYears = ageDifference / (365 * 24 * 60 * 60 * 1000);
+
+    switch (ageLimit.operator) {
+        case '==':
+            return ageYears === ageLimit.age;
+        case '>':
+            return ageYears > ageLimit.age;
+        case '<':
+            return ageYears < ageLimit.age;
+        case '>=':
+            return ageYears >= ageLimit.age;
+        case '<=':
+            return ageYears <= ageLimit.age;
+        default:
+            return false;
+    }
 }

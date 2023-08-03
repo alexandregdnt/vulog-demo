@@ -7,7 +7,7 @@ export type TokenObj = {
     token_type: "bearer";
 }
 
-export async function createToken(username: string, password: string) {
+export async function createToken(username: string, password: string): Promise<TokenObj> {
     const data = new URLSearchParams({
         username: username,
         password: password,
@@ -31,7 +31,7 @@ export async function createToken(username: string, password: string) {
     return await res.json();
 }
 
-export async function refreshToken(refreshToken: string) {
+export async function refreshToken(refreshToken: string): Promise<TokenObj> {
     const data = new URLSearchParams({
         refresh_token: refreshToken,
         client_secret: process.env.VULOG_CLIENT_SECRET as string,

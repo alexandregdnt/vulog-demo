@@ -40,7 +40,7 @@ export default function Login() {
 
         if (res.status === 200) {
             sessionStorage.setItem('token', JSON.stringify(await res.json()));
-            await router.push('/');
+            await router.push('/dashboard');
         }
     } catch (error: any) {
       console.error(error.message);

@@ -1,10 +1,31 @@
-import Link from "next/link";
+'use client';
+
 import Nav from '@components/Nav/Nav';
-import { HiOutlineHome, HiOutlineUserGroup, HiOutlineFolder, HiOutlineChartBar, HiOutlineCog } from 'react-icons/hi';
+import {
+    HiOutlineHome,
+    HiOutlineUserGroup,
+    HiOutlineFolder,
+    HiOutlineChartBar,
+    HiOutlineCog,
+    HiOutlineShoppingCart
+} from 'react-icons/hi';
+import {useEffect} from "react";
+import {verifyToken} from "@/utils/helpers";
+import {redirect} from "next/navigation";
 
 export default function RootLayout({ children }: {
     children: React.ReactNode
 }) {
+    useEffect(() => {
+        switch (verifyToken(sessionStorage.getItem('token'))) {
+            case -1:
+                redirect('/auth/logout');
+                break;
+            case 0:
+                redirect('/auth/refresh');
+                break;
+        }
+    }, []);
 
     return (
         <>
@@ -37,6 +58,7 @@ export default function RootLayout({ children }: {
             <Nav
                 items={[
                     { name: 'Home', Icon: HiOutlineHome, link: '/dashboard' },
+                    { name: 'Products', Icon: HiOutlineShoppingCart, link: '/dashboard/products' },
                     { name: 'Group', Icon: HiOutlineUserGroup, link: '/group' },
                     { name: 'Folder', Icon: HiOutlineFolder, link: '/folder' },
                     { name: 'Chart', Icon: HiOutlineChartBar, link: '/chart' },

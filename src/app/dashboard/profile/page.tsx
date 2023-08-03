@@ -1,17 +1,17 @@
 'use client';
 
 import { useState, useEffect, FC } from "react";
-import { UserData, Service } from "@/vulog/user";
+import {Service, User} from "@/vulog/users";
 import { HiOutlineMail, HiOutlinePhone } from "react-icons/hi";
 import { HiUser, HiOutlineOfficeBuilding } from "react-icons/hi";
 import { HiCheckCircle, HiXCircle } from "react-icons/hi";
 
 export default function Profile() {
-    const [user, setUser] = useState<UserData | null>(null);
+    const [user, setUser] = useState<User | null>(null);
 
     useEffect(() => {
-        handleGetCurentUser();
-    }, []);
+        if (!user) handleGetCurentUser();
+    }, [user]);
 
     const handleGetCurentUser = () => {
         const token = sessionStorage.getItem('token') as string;
@@ -23,7 +23,7 @@ export default function Profile() {
         }
 
         // Append the access token as a query parameter in the URL
-        const url = `/api/users?access_token=${encodeURIComponent(accessToken)}`;
+        const url = `/api/user?access_token=${encodeURIComponent(accessToken)}`;
 
         // Call api next /api/user GET
         fetch(url)
@@ -42,6 +42,7 @@ export default function Profile() {
                 console.error('Error fetching data:', error);
             });
     };
+
     const ServiceCard: FC<{ service: Service }> = ({ service }) => (
         <div className="p-4 m-2 bg-gray-500 rounded-lg text-gray-100">
             <h4 className="text-lg font-semibold">{service.name}</h4>
@@ -96,11 +97,11 @@ export default function Profile() {
                                     <div className="col-span-2 p-4 bg-gray-600 rounded-lg">
                                         <h2 className="text-lg font-semibold mb-2">Services</h2>
                                         <div className="flex flex-wrap">
-                                            {user.profiles[0].services.map((service, i) => (
+                                            {user.profiles.map((profile) => profile.entity.services?.map((service, i) => (
                                                 <div key={i}>
                                                     <ServiceCard service={service} />
                                                 </div>
-                                            ))}
+                                            )))}
                                         </div>
                                     </div>
                                 </div>

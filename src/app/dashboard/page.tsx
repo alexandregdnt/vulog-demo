@@ -1,29 +1,16 @@
 'use client';
 
-import Link from 'next/link'
 import Table from '@components/Table/Table';
 import {useEffect, useState} from "react";
-import {redirect} from "next/navigation";
-import {verifyToken} from "@/utils/helpers";
 
 export default function Home() {
     const [dataPack, setDataPack] = useState([]);
 
     useEffect(() => {
-        switch (verifyToken(sessionStorage.getItem('token'))) {
-            case -1:
-                redirect('/auth/logout');
-                break;
-            case 0:
-                redirect('/auth/refresh');
-                break;
-        }
-
-        handleSystemCreditsPackage()
-            .then((res) => console.log(res));
+        handleSystemCreditsPackage();
     }, []);
 
-    const handleSystemCreditsPackage = async () => {
+    const handleSystemCreditsPackage = () => {
         const token = sessionStorage.getItem('token') as string;
         const accessToken = JSON.parse(token)?.access_token;
 

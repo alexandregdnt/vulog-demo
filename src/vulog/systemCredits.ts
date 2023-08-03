@@ -4,7 +4,7 @@ type ModelIdsByServiceId = {
     };
 };
 
-type SystemCreditsPackage = {
+export type SystemCreditsPackage = {
     id: string;
     fleetId: string;
     modelIdsByServiceId: ModelIdsByServiceId;
@@ -35,7 +35,7 @@ export async function getSystemCreditsPackages(token: string): Promise<SystemCre
         });
 
         const data: SystemCreditsPackage[] = await res.json();
-        console.log('data :>> ', data);
+        // console.log('data :>> ', data);
 
         // The return value is *not* serialized
         // You can return Date, Map, Set, etc.
