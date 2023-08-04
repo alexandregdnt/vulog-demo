@@ -9,28 +9,28 @@ export type User = {
     accountStatus: 'APPROVED' | 'SUSPENDED' | 'ARCHIVED' | 'INACTIVE';
     gender: 'MALE' | 'FEMALE' | 'UNDEFINED';
     locale: string;
-    registrationDate: Date;
-    birthDate: Date;
+    registrationDate: string; // datetime
+    birthDate: string; // datetime
     nationality: string;
     membershipNumber: string;
     notes?: string;
     address: Address;
     dataPrivacyConsent: boolean;
-    dataPrivacyConsentUpdateDate: Date;
+    dataPrivacyConsentUpdateDate: string; // datetime
     profilingConsent: boolean;
-    profilingConsentUpdateDate: Date;
+    profilingConsentUpdateDate: string; // datetime
     marketingConsent: boolean;
     marketingConsentUpdateDate: boolean;
-    dateOfAgreements: Date;
+    dateOfAgreements: string; // datetime
     agreements: Agreement[];
     profiles: Profile[];
     oldCustomerId: string;
-    updateDate: Date;
+    updateDate: string; // datetime
     membershipStatus?: 'VALID' | 'INVALID';
     surveyConsent: boolean;
-    surveyConsentUpdateDate: Date;
+    surveyConsentUpdateDate: string; // datetime
     shareDataConsent: boolean;
-    shareDataConsentUpdateDate: Date;
+    shareDataConsentUpdateDate: string; // datetime
 }
 
 type Address = {
@@ -45,7 +45,7 @@ type Agreement = {
     fleetId: string;
     cityId: string;
     userId: string;
-    date: Date;
+    date: string; // datetime
     hasAcceptedLatest: boolean;
 };
 
@@ -64,8 +64,8 @@ type Profile = {
     email: string;
     emailConsent: boolean;
     identificationNumber: string;
-    creationDate: Date;
-    updateDate: Date;
+    creationDate: string; // datetime
+    updateDate: string; // datetime
     rfid?: string;
     status: 'APPROVED' | 'SUSPENDED' | 'INACTIVE' | 'ARCHIVED';
     name?: string;

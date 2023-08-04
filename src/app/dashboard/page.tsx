@@ -1,9 +1,11 @@
 'use client';
 
-import Table from '@components/Table/Table';
 import {useEffect, useState} from "react";
+import {useUser} from "@components/context/UserProvider";
+import Table from '@components/Table/Table';
 
 export default function Home() {
+    const { token } = useUser();
     const [dataPack, setDataPack] = useState([]);
 
     useEffect(() => {
@@ -11,16 +13,13 @@ export default function Home() {
     }, []);
 
     const handleSystemCreditsPackage = () => {
-        const token = sessionStorage.getItem('token') as string;
-        const accessToken = JSON.parse(token)?.access_token;
-
-        if (!accessToken) {
+        if (!token?.access_token) {
             console.error('Access token not found in sessionStorage');
             return;
         }
 
         // Append the access token as a query parameter in the URL
-        const url = `/api/systemCredits?access_token=${encodeURIComponent(accessToken)}`;
+        const url = `/api/systemCredits?access_token=${encodeURIComponent(token.access_token)}`;
 
         // Call api next /api/systemCredits GET
         fetch(url)
@@ -32,7 +31,7 @@ export default function Home() {
             })
             .then((data) => {
                 // Map the response data to a new structure
-                const transformedData = data.map((item: any) => [item.name, item.price.toString(), item.systemCreditsAvailable.toString(), item.validityDays.toString()]);
+                const transformedData = data.map((item: any) => [item.name, item.price?.toString(), item.systemCreditsAvailable?.toString(), item.validityDays?.toString()]);
                 setDataPack(transformedData);
                 console.log(transformedData);
             })

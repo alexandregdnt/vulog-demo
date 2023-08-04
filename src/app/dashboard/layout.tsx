@@ -1,6 +1,7 @@
 'use client';
 
-import Nav from '@components/Nav/Nav';
+import {redirect} from "next/navigation";
+import {useEffect} from "react";
 import {
     HiOutlineHome,
     HiOutlineUserGroup,
@@ -9,23 +10,45 @@ import {
     HiOutlineCog,
     HiOutlineShoppingCart
 } from 'react-icons/hi';
-import {useEffect} from "react";
-import {verifyToken} from "@/utils/helpers";
-import {redirect} from "next/navigation";
+import {useUser} from "@components/context/UserProvider";
+import Nav from '@components/Nav/Nav';
 
 export default function RootLayout({ children }: {
     children: React.ReactNode
 }) {
+    const { token, user, setUser } = useUser();
+
     useEffect(() => {
-        switch (verifyToken(sessionStorage.getItem('token'))) {
-            case -1:
-                redirect('/auth/logout');
-                break;
-            case 0:
-                redirect('/auth/refresh');
-                break;
-        }
+        if (!token) redirect('/auth/login');
+        if (!user) handleGetCurentUser();
     }, []);
+
+    const handleGetCurentUser = () => {
+        if (!token?.access_token) {
+            console.error('Access token not found in sessionStorage');
+            return;
+        }
+
+        // Append the access token as a query parameter in the URL
+        const url = `/api/user?access_token=${encodeURIComponent(token.access_token)}`;
+
+        // Call api next /api/user GET
+        fetch(url)
+            .then((response) => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then((data) => {
+                // Handle the response data
+                setUser(data);
+            })
+            .catch((error) => {
+                // Handle any errors that occurred during the fetch
+                console.error('Error fetching data:', error);
+            });
+    };
 
     return (
         <>

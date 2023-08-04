@@ -3,21 +3,23 @@
 import {useEffect} from "react";
 import {redirect, useRouter} from "next/navigation";
 import {verifyToken} from "@/utils/helpers";
+import {useUser} from "@components/context/UserProvider";
 
 export default function Refresh() {
     const router = useRouter();
+    const { token, setToken } = useUser();
 
     useEffect(() => {
-        const token = sessionStorage.getItem('token');
+        // const token = sessionStorage.getItem('token');
 
         if (token) {
-            const jsonToken = JSON.parse(token);
+            // const jsonToken = JSON.parse(token);
 
-            switch (verifyToken(sessionStorage.getItem('token'))) {
+            switch (verifyToken(token)) {
                 case 0:
                     try {
                         const data = new URLSearchParams({
-                            refresh_token: jsonToken.refresh_token
+                            refresh_token: token.refresh_token
                         });
                         fetch(`/api/refresh`, {
                             method: "POST",
@@ -28,7 +30,8 @@ export default function Refresh() {
                             body: data
                         })
                             .then(async (res) => {
-                                sessionStorage.setItem('token', JSON.stringify(await res.json()));
+                                // sessionStorage.setItem('token', JSON.stringify(await res.json()));
+                                setToken(await res.json());
                                 router.push('/dashboard');
                             });
                     } catch (error: any) {

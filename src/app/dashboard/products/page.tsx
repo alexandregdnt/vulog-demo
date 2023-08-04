@@ -1,25 +1,31 @@
 'use client';
 
 import {useEffect, useState} from "react";
+import {useUser} from "@components/context/UserProvider";
+import {filterAvailablePackages} from "@/utils/helpers";
+import {ProductWithServices} from "@/pages/api/products/all";
+import ProductDetails from "@/app/dashboard/products/ProductDetails";
 
 export default function Shop() {
-    const [products, setProducts] = useState();
+    const { token, user } = useUser();
+    const [products, setProducts] = useState<ProductWithServices[]>([]);
 
     useEffect(() => {
-        if (!products) handleGetProducts();
+        if (!products || products.length <= 0) handleGetProducts();
     }, [products]);
 
     const handleGetProducts = () => {
-        const token = sessionStorage.getItem('token') as string;
-        const accessToken = JSON.parse(token)?.access_token;
-
-        if (!accessToken) {
+        if (!token?.access_token) {
             console.error('Access token not found in sessionStorage');
+            return;
+        }
+        if (!user) {
+            console.error('User unknown');
             return;
         }
 
         // Append the access token as a query parameter in the URL
-        const url = `/api/products/all?access_token=${encodeURIComponent(accessToken)}`;
+        const url = `/api/products/all?access_token=${encodeURIComponent(token.access_token)}`;
 
         // Call api next /api/user GET
         fetch(url)
@@ -31,7 +37,8 @@ export default function Shop() {
             })
             .then((data) => {
                 // Handle the response data
-                setProducts(data);
+                console.log(data);
+                setProducts(filterAvailablePackages(data, user));
             })
             .catch((error) => {
                 // Handle any errors that occurred during the fetch
@@ -39,7 +46,12 @@ export default function Shop() {
             });
     };
 
+    if (!products || !user) return <div>Loading...</div>;
+
     return (
-        <div>{JSON.stringify(products)}</div>
+        <div>
+            test
+            {products.map((product) => <ProductDetails key={product.id} product={product} />)}
+        </div>
     )
 }

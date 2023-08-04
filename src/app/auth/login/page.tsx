@@ -3,15 +3,17 @@
 import {useEffect, useState} from 'react';
 import {redirect, useRouter} from "next/navigation";
 import {verifyToken} from "@/utils/helpers";
+import {useUser} from "@components/context/UserProvider";
 
 export default function Login() {
     const router = useRouter();
+    const { token, setToken } = useUser();
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
     useEffect(() => {
-        switch (verifyToken(sessionStorage.getItem('token'))) {
+        switch (verifyToken(token)) {
             case 0:
                 redirect('/auth/refresh');
                 break;
@@ -39,7 +41,8 @@ export default function Login() {
         });
 
         if (res.status === 200) {
-            sessionStorage.setItem('token', JSON.stringify(await res.json()));
+            // sessionStorage.setItem('token', JSON.stringify(await res.json()));
+            setToken(await res.json());
             await router.push('/dashboard');
         }
     } catch (error: any) {

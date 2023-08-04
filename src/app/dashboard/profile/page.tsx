@@ -1,47 +1,12 @@
 'use client';
 
 import { useState, useEffect, FC } from "react";
-import {Service, User} from "@/vulog/users";
-import { HiOutlineMail, HiOutlinePhone } from "react-icons/hi";
-import { HiUser, HiOutlineOfficeBuilding } from "react-icons/hi";
-import { HiCheckCircle, HiXCircle } from "react-icons/hi";
+import { HiOutlineMail, HiOutlinePhone, HiUser, HiOutlineOfficeBuilding, HiCheckCircle, HiXCircle } from "react-icons/hi";
+import {Service} from "@/vulog/users";
+import {useUser} from "@components/context/UserProvider";
 
 export default function Profile() {
-    const [user, setUser] = useState<User | null>(null);
-
-    useEffect(() => {
-        if (!user) handleGetCurentUser();
-    }, [user]);
-
-    const handleGetCurentUser = () => {
-        const token = sessionStorage.getItem('token') as string;
-        const accessToken = JSON.parse(token)?.access_token;
-
-        if (!accessToken) {
-            console.error('Access token not found in sessionStorage');
-            return;
-        }
-
-        // Append the access token as a query parameter in the URL
-        const url = `/api/user?access_token=${encodeURIComponent(accessToken)}`;
-
-        // Call api next /api/user GET
-        fetch(url)
-            .then((response) => {
-                if (!response.ok) {
-                    throw new Error('Network response was not ok');
-                }
-                return response.json();
-            })
-            .then((data) => {
-                // Handle the response data
-                setUser(data);
-            })
-            .catch((error) => {
-                // Handle any errors that occurred during the fetch
-                console.error('Error fetching data:', error);
-            });
-    };
+    const { user } = useUser();
 
     const ServiceCard: FC<{ service: Service }> = ({ service }) => (
         <div className="p-4 m-2 bg-gray-500 rounded-lg text-gray-100">
