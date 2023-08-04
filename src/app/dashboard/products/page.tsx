@@ -47,9 +47,15 @@ export default function Shop() {
             });
     };
 
-    const headers = ['NAME', 'PRICE (€)', 'CREDITS', 'VALIDE (days)', 'SERVICES'];
+    const headers = ['NAME','LIMITE AGE' ,'PRICE (€)', 'CREDITS', 'VALIDE (days)', 'SERVICES'];
     const data = products.map((product) => {
-        return [product.name, product.price, product.systemCreditsAvailable, product.validityDays, product.services.map(service => service.name).join(', ')];
+        return [
+            product.name,
+            product.type,
+            product.price,
+            product.systemCreditsAvailable,
+            product.validityDays,
+            product.services.map(service => service.name).join(', ')];
     });
 
     if (!products || !user) return <div>Loading...</div>;
