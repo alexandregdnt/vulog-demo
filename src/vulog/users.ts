@@ -126,3 +126,51 @@ export async function getUser(token: string): Promise<User> {
         throw new Error('Failed to fetch user data.');
     }
 }
+
+export async function postUpdateUserBithdate(token: string, birthdate: string) {
+    try {
+        const user = await getUser(token);
+        const userId = user.id;
+
+        const data = {
+            "alipayScore": 0,
+            "birthDate": birthdate,
+            "dataPrivacyConsent": true,
+            "dataPrivacyConsentUpdateDate": "1975-01-01T00:00:00.000Z",
+            "dateOfAgreements": "1975-01-01T00:00:00.000Z",
+            "firstName": "string",
+            "lastName": "string",
+            "locale": "string",
+            "marketingConsent": true,
+            "marketingConsentUpdateDate": "1975-01-01T00:00:00.000Z",
+            "membershipNumber": "string",
+            "middleName": "string",
+            "nationality": "string",
+            "notes": "string",
+            "password": "string",
+            "preferredName": "string",
+            "profilingConsent": true,
+            "profilingConsentUpdateDate": "1975-01-01T00:00:00.000Z",
+            "userName": "string"
+        }
+
+        const headers = new Headers();
+        headers.append("x-api-key", process.env.VULOG_API_KEY as string);
+        headers.append("Authorization", "Bearer " + token);
+        headers.append("Content-Type", "application/json");
+        const res = await fetch(`${process.env.VULOG_HOST}/boapi/proxy/user/fleets/${process.env.VULOG_FLEET_ID}/users/${userId}`, {
+            method: 'POST',
+            headers,
+            body: JSON.stringify(data)
+        });
+
+        const data2: any = await res.json();
+        console.log('data2', data2);
+
+        return data2;
+    } catch (error) {
+        // Catch any errors that occurred during the API request and handle them appropriately
+        console.error('Error fetching user data:', error);
+        throw new Error('Failed to fetch user data.');
+    }
+}

@@ -45,10 +45,10 @@ export default function Home() {
 
     return (
         <div className='flex flex-wrap -mx-3 -mb-3 md:mb-0'>
-            <div className='w-full md:w-2/3 px-3 mb-3 md:mb-0'>
+            <div className='w-full md:w-full px-3 mb-3 md:mb-0'>
                 <Table headers={headers} data={dataPack} itemsPerPage={2}/>
             </div>
-            <div className='w-full md:w-1/3 px-3 mb-3 md:mb-0'>
+            {/*<div className='w-full md:w-1/3 px-3 mb-3 md:mb-0'>
                 <section className='py-3'>
                     <div className='container mx-auto'>
                         <div className='w-full'>
@@ -273,7 +273,7 @@ export default function Home() {
                         </div>
                     </div>
                 </section>
-            </div>
+            </div>*/}
         </div>
     );
 }

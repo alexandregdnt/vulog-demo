@@ -82,10 +82,6 @@ export default function RootLayout({ children }: {
                 items={[
                     { name: 'Home', Icon: HiOutlineHome, link: '/dashboard' },
                     { name: 'Products', Icon: HiOutlineShoppingCart, link: '/dashboard/products' },
-                    { name: 'Group', Icon: HiOutlineUserGroup, link: '/group' },
-                    { name: 'Folder', Icon: HiOutlineFolder, link: '/folder' },
-                    { name: 'Chart', Icon: HiOutlineChartBar, link: '/chart' },
-                    { name: 'Settings', Icon: HiOutlineCog, link: '/settings' },
                 ]}
             />
             <div className='mx-auto lg:ml-24'>
