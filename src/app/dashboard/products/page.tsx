@@ -5,6 +5,7 @@ import {useUser} from "@components/context/UserProvider";
 import {filterAvailablePackages} from "@/utils/helpers";
 import {ProductWithServices} from "@/pages/api/products/all";
 import ProductDetails from "@/app/dashboard/products/ProductDetails";
+import Table from "@components/Table/Table";
 
 export default function Shop() {
     const { token, user } = useUser();
@@ -46,12 +47,17 @@ export default function Shop() {
             });
     };
 
+    const headers = ['NAME', 'PRICE (€)', 'CREDITS', 'VALIDE (days)', 'SERVICES'];
+    const data = products.map((product) => {
+        return [product.name, product.price, product.systemCreditsAvailable, product.validityDays, product.services.map(service => service.name).join(', ')];
+    });
+
     if (!products || !user) return <div>Loading...</div>;
 
     return (
         <div>
-            test
-            {products.map((product) => <ProductDetails key={product.id} product={product} />)}
+            {/*{products.map((product) => <ProductDetails key={product.id} product={product} />)}*/}
+            <Table headers={headers} data={data} />
         </div>
     )
 }
