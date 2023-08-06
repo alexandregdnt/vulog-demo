@@ -5,11 +5,12 @@ import {redirect} from "next/navigation";
 import {useUser} from "@components/context/UserProvider";
 
 export default function Logout() {
-    const { setToken } = useUser();
+    const { setToken, setUser } = useUser();
 
     useEffect(() => {
-        // sessionStorage.clear();
+        sessionStorage.clear();
         setToken(null);
+        setUser(null);
         redirect('/auth/login');
     }, []);
 

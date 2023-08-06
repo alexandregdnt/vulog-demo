@@ -1,5 +1,5 @@
 import {NextApiRequest, NextApiResponse} from "next";
-import {getUser, postUpdateUserBithdate} from "@/vulog/users";
+import {getUser, postUpdateUserBirthdate} from "@/vulog/users";
 
 export default function handler(req: NextApiRequest, res: NextApiResponse) {
     if (req.method === 'GET') {
@@ -27,7 +27,7 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
             return res.status(400).json({ error: 'Birthdate is missing in the body.' });
         }
 
-        postUpdateUserBithdate(accessToken as string, birthdate as string)
+        postUpdateUserBirthdate(accessToken as string, birthdate as string)
             .then((response) => {
                 res.status(200).json(response);
             })

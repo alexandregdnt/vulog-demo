@@ -3,6 +3,8 @@ import {Token} from "@/vulog/auth";
 import {User} from "@/vulog/users";
 import {Product} from "@/vulog/products";
 import {ProductWithServices} from "@/pages/api/products/all";
+import {SystemCreditsPackage} from "@/vulog/systemCredits";
+import {Service} from "@/vulog/services";
 
 export function jsonConcat(o1: any, o2: any) {
     for (let key in o2) {
@@ -26,7 +28,7 @@ export function verifyToken(obj: Token | null): -1 | 0 | 1 {
     return -1;
 }
 
-export function filterAvailablePackages(packages: ProductWithServices[], user: User): ProductWithServices[] {
+export function filterAvailablePackages(packages: SystemCreditsPackage[], user: User): (SystemCreditsPackage & { ageLimit?: AgeLimitation })[] {
     const ageLimitations = extraConfiguration.ageLimitations;
 
     return packages.filter(packageItem => {
@@ -43,6 +45,15 @@ export function filterAvailablePackages(packages: ProductWithServices[], user: U
         if (hasAgeLimit) return false;
 
         return true; // Include the package if it doesn't match any age limitation or the user meets the age limitation
+    }).map(packageItem => {
+        const ageLimitForPackage = ageLimitations.find(ageLimit =>
+            ageLimit.packagesIds.includes(packageItem.id)
+        );
+
+        return {
+            ...packageItem,
+            ageLimit: ageLimitForPackage
+        };
     });
 }
 

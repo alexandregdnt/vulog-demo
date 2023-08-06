@@ -2,25 +2,22 @@
 
 import { useState, useEffect, FC } from "react";
 import { HiOutlineMail, HiOutlinePhone, HiUser, HiOutlineOfficeBuilding, HiCheckCircle, HiXCircle, HiCake } from "react-icons/hi";
-import {Service} from "@/vulog/users";
+import {Service, User} from "@/vulog/users";
 import {useUser} from "@components/context/UserProvider";
 import {HiArrowSmallDown, HiArrowSmallRight, HiArrowSmallUp} from "react-icons/hi2";
 
 export default function Profile() {
-    const { token } = useUser();
-    const { user } = useUser();
+    const { token, user, setUser } = useUser();
 
     // make call api post bithday /api/user POST
-    const changeBirthday = (bitrhdate: string) => {
+    const changeBirthday = (birthdate: string) => {
         if (!token?.access_token) {
             console.error('Access token not found in sessionStorage');
             return;
         }
 
         const url = `/api/user?access_token=${encodeURIComponent(token.access_token)}`;
-        const data = {
-            birthdate: bitrhdate
-        }
+        const data = { birthdate }
 
         fetch(url, {
             method: 'POST',
@@ -33,6 +30,10 @@ export default function Profile() {
                 if (!response.ok) {
                     throw new Error('Network response was not ok');
                 }
+                let updatedUser: User = user as User;
+                updatedUser.birthDate = birthdate;
+                setUser(updatedUser);
+
                 return response.json();
             })
             .catch((error) => {
@@ -110,27 +111,27 @@ export default function Profile() {
                                     <div className="col-span-2 p-4 bg-gray-600 rounded-lg">
                                         <h2 className="text-lg font-semibold mb-2">Change BirthDate</h2>
                                         <div className="flex flex-wrap">
-                                            <div className="p-4 m-2 bg-gray-500 rounded-lg text-gray-100" onClick={() => changeBirthday('1940-01-01T00:00:00.000Z')}>
+                                            <button className="p-4 m-2 bg-gray-500 rounded-lg text-gray-100" onClick={() => changeBirthday('1940-01-01T00:00:00.000Z')}>
                                                 <h4 className="text-lg font-semibold">Senior</h4>
                                                 <div className="flex items-center">
                                                     <HiArrowSmallUp className="h-5 w-5 text-red-500" />
                                                     <span className="ml-2">Senior</span>
                                                 </div>
-                                            </div>
-                                            <div className="p-4 m-2 bg-gray-500 rounded-lg text-gray-100" onClick={() => changeBirthday('1990-01-01T00:00:00.000Z')}>
+                                            </button>
+                                            <button className="p-4 m-2 bg-gray-500 rounded-lg text-gray-100" onClick={() => changeBirthday('1990-01-01T00:00:00.000Z')}>
                                                 <h4 className="text-lg font-semibold">Major</h4>
                                                 <div className="flex items-center">
                                                     <HiArrowSmallRight className="h-5 w-5 text-white-500" />
                                                     <span className="ml-2">Major</span>
                                                 </div>
-                                            </div>
-                                            <div className="p-4 m-2 bg-gray-500 rounded-lg text-gray-100" onClick={() => changeBirthday('2001-01-01T00:00:00.000Z')}>
+                                            </button>
+                                            <button className="p-4 m-2 bg-gray-500 rounded-lg text-gray-100" onClick={() => changeBirthday('2001-01-01T00:00:00.000Z')}>
                                                 <h4 className="text-lg font-semibold">Student</h4>
                                                 <div className="flex items-center">
                                                     <HiArrowSmallDown className="h-5 w-5 text-green-500" />
                                                     <span className="ml-2">Student</span>
                                                 </div>
-                                            </div>
+                                            </button>
                                         </div>
                                     </div>
                                 </div>

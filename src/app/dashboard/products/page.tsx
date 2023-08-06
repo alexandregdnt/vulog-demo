@@ -3,19 +3,20 @@
 import {useEffect, useState} from "react";
 import {useUser} from "@components/context/UserProvider";
 import {filterAvailablePackages} from "@/utils/helpers";
-import {ProductWithServices} from "@/pages/api/products/all";
-import ProductDetails from "@/app/dashboard/products/ProductDetails";
 import Table from "@components/Table/Table";
+import {SystemCreditsPackage} from "@/vulog/systemCredits";
+import {AgeLimitation} from "../../../../data/extra.config";
 
 export default function Shop() {
     const { token, user } = useUser();
-    const [products, setProducts] = useState<ProductWithServices[]>([]);
+    const [packages, setPackages] = useState<(SystemCreditsPackage & { ageLimit?: AgeLimitation })[]>([]);
 
     useEffect(() => {
-        if (!products || products.length <= 0) handleGetProducts();
-    }, [products]);
+        console.log('packages', packages)
+        if (!packages || packages.length <= 0) handleGetPackages();
+    }, [packages]);
 
-    const handleGetProducts = () => {
+    const handleGetPackages = () => {
         if (!token?.access_token) {
             console.error('Access token not found in sessionStorage');
             return;
@@ -26,7 +27,7 @@ export default function Shop() {
         }
 
         // Append the access token as a query parameter in the URL
-        const url = `/api/products/all?access_token=${encodeURIComponent(token.access_token)}`;
+        const url = `/api/systemCredits?access_token=${encodeURIComponent(token.access_token)}`;
 
         // Call api next /api/user GET
         fetch(url)
@@ -39,7 +40,7 @@ export default function Shop() {
             .then((data) => {
                 // Handle the response data
                 console.log(data);
-                setProducts(filterAvailablePackages(data, user));
+                setPackages(filterAvailablePackages(data, user));
             })
             .catch((error) => {
                 // Handle any errors that occurred during the fetch
@@ -47,23 +48,24 @@ export default function Shop() {
             });
     };
 
-    const headers = ['NAME','LIMITE AGE' ,'PRICE (€)', 'CREDITS', 'VALIDE (days)', 'SERVICES'];
-    const data = products.map((product) => {
+    const headers = ['NAME','LIMITE AGE' ,'PRICE (€)', 'CREDITS', 'VALIDE (days)'];
+    const data = packages.map((product) => {
         return [
             product.name,
-            product.type,
+            product.ageLimit ? `${product.ageLimit.operator} ${product.ageLimit.age} years` : 'None',
             product.price,
             product.systemCreditsAvailable,
             product.validityDays,
-            product.services.map(service => service.name).join(', ')];
+            // product.services.map(service => service.name).join(', ')
+        ];
     });
 
-    if (!products || !user) return <div>Loading...</div>;
+    if (!packages || !user) return <div>Loading...</div>;
 
     return (
         <div>
-            {/*{products.map((product) => <ProductDetails key={product.id} product={product} />)}*/}
-            <Table headers={headers} data={data} />
+            {/*{packages.map((product) => <ProductDetails key={product.id} product={product} />)}*/}
+            <Table headers={headers} data={data}  title={'Packages'}/>
         </div>
     )
 }

@@ -3,12 +3,13 @@ import Header from './Header';
 import Row from './Row';
 
 type TableProps = {
+    title: string,
     headers: string[];
     data: any[][];
     itemsPerPage?: number;
 };
 
-const Table: FC<TableProps> = ({ headers, data, itemsPerPage = 5 }) => {
+const Table: FC<TableProps> = ({ title = 'Table title',  headers, data, itemsPerPage = 5 }) => {
     const [currentPage, setCurrentPage] = useState(1);
 
     const totalItems = data.length;
@@ -35,7 +36,7 @@ const Table: FC<TableProps> = ({ headers, data, itemsPerPage = 5 }) => {
             <div className='container px-4 mx-auto'>
                 <div className='pt-6 pb-8 bg-gray-500 rounded-xl'>
                     <div className='px-6'>
-                        <h4 className='text-lg text-gray-100 font-semibold mb-6'>Companies</h4>
+                        <h4 className='text-lg text-gray-100 font-semibold mb-6'>{title}</h4>
                         <div className='w-full mt-6 pb-6 overflow-x-auto'>
                             <table className='w-full min-w-max'>
                                 <thead>

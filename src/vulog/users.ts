@@ -117,7 +117,7 @@ export async function getUser(token: string): Promise<User> {
             headers
         });
         const data2: any = await res2.json();
-        console.log('data2', data2);
+        // console.log('data2', data2);
 
         return data2;
     } catch (error) {
@@ -127,31 +127,16 @@ export async function getUser(token: string): Promise<User> {
     }
 }
 
-export async function postUpdateUserBithdate(token: string, birthdate: string) {
+export async function postUpdateUserBirthdate(token: string, birthdate: string) {
     try {
         const user = await getUser(token);
         const userId = user.id;
 
         const data = {
-            "alipayScore": 0,
             "birthDate": birthdate,
-            "dataPrivacyConsent": true,
-            "dataPrivacyConsentUpdateDate": "1975-01-01T00:00:00.000Z",
-            "dateOfAgreements": "1975-01-01T00:00:00.000Z",
-            "firstName": "string",
-            "lastName": "string",
-            "locale": "string",
-            "marketingConsent": true,
-            "marketingConsentUpdateDate": "1975-01-01T00:00:00.000Z",
-            "membershipNumber": "string",
-            "middleName": "string",
-            "nationality": "string",
-            "notes": "string",
-            "password": "string",
-            "preferredName": "string",
-            "profilingConsent": true,
-            "profilingConsentUpdateDate": "1975-01-01T00:00:00.000Z",
-            "userName": "string"
+            "firstName": "Louis",
+            "lastName": "Leveneur",
+            "locale": "fr-FR",
         }
 
         const headers = new Headers();
@@ -165,7 +150,7 @@ export async function postUpdateUserBithdate(token: string, birthdate: string) {
         });
 
         const data2: any = await res.json();
-        console.log('data2', data2);
+        // console.log('data2', data2);
 
         return data2;
     } catch (error) {
